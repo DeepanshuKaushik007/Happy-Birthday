@@ -10,16 +10,19 @@
       background: #000;
       color: #fff;
       font-family: 'Arial', sans-serif;
+      overflow: hidden;
+    }
+
+    .container {
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
-      overflow: hidden;
       flex-direction: column;
     }
 
     .countdown {
-      font-size: 100px;
+      font-size: 120px;
       animation: pop 0.8s ease-in-out infinite;
     }
 
@@ -31,50 +34,82 @@
     .birthday {
       display: none;
       text-align: center;
+      animation: fadeIn 1.5s ease-in;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.8); }
+      to { opacity: 1; transform: scale(1); }
     }
 
     .cake {
-      font-size: 30px;
-      line-height: 1.2;
+      font-size: 40px;
+      animation: bounce 1s infinite alternate;
       margin-bottom: 20px;
     }
 
-    .firework {
-      position: absolute;
-      width: 4px;
-      height: 4px;
-      background: yellow;
-      border-radius: 50%;
-      animation: explode 1.5s ease-out forwards;
-    }
-
-    @keyframes explode {
-      0% {
-        transform: scale(1);
-        opacity: 1;
-      }
-      100% {
-        transform: scale(10);
-        opacity: 0;
-      }
+    @keyframes bounce {
+      from { transform: translateY(0); }
+      to { transform: translateY(-20px); }
     }
 
     h1 {
       font-size: 50px;
       color: #ff69b4;
     }
+
+    .firework, .confetti {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      background: yellow;
+      border-radius: 50%;
+      animation: explode 1.5s ease-out forwards;
+    }
+
+    .confetti {
+      border-radius: 0;
+      width: 5px;
+      height: 10px;
+      animation: confettiDrop 2s ease-out forwards;
+    }
+
+    @keyframes explode {
+      0% { transform: scale(1); opacity: 1; }
+      100% { transform: scale(10); opacity: 0; }
+    }
+
+    @keyframes confettiDrop {
+      0% { transform: translateY(0) rotate(0); opacity: 1; }
+      100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+    }
+
+    .balloon {
+      position: absolute;
+      width: 30px;
+      height: 50px;
+      background: red;
+      border-radius: 15px 15px 15px 15px;
+      animation: float 6s infinite ease-in;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(100vh) translateX(0); }
+      100% { transform: translateY(-100vh) translateX(50px); }
+    }
   </style>
 </head>
 <body>
 
-  <div class="countdown" id="countdown">3</div>
+  <div class="container">
+    <div class="countdown" id="countdown">3</div>
 
-  <div class="birthday" id="birthday">
-    <div class="cake">
-      🎂🎂🎂<br/>
-      🎉 Happy Birthday, Shilpa Mam!! 🎉
+    <div class="birthday" id="birthday">
+      <div class="cake">🎂🎂🎂</div>
+      <h1>🎉 Happy Birthday Shilpa Mam!! 🎉</h1>
+      <h2> Wish you a joyful day. </h2>
+
     </div>
-    <h1>Wishing You a Joyful Day!</h1>
   </div>
 
   <script>
@@ -91,6 +126,8 @@
         countdownEl.style.display = 'none';
         birthdayEl.style.display = 'block';
         launchFireworks();
+        dropConfetti();
+        launchBalloons();
       }
     }, 1000);
 
@@ -102,16 +139,38 @@
         fw.style.left = Math.random() * 100 + '%';
         fw.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 60%)`;
         document.body.appendChild(fw);
-
-        setTimeout(() => {
-          fw.remove();
-        }, 1500);
+        setTimeout(() => fw.remove(), 1500);
       }
 
-      // Repeat fireworks
       setInterval(() => {
         launchFireworks();
       }, 3000);
+    }
+
+    function dropConfetti() {
+      for (let i = 0; i < 100; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti';
+        confetti.style.left = Math.random() * 100 + '%';
+        confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 60%)`;
+        document.body.appendChild(confetti);
+        setTimeout(() => confetti.remove(), 2000);
+      }
+    }
+
+    function launchBalloons() {
+      for (let i = 0; i < 10; i++) {
+        const balloon = document.createElement('div');
+        balloon.className = 'balloon';
+        balloon.style.left = Math.random() * 100 + '%';
+        balloon.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
+        document.body.appendChild(balloon);
+        setTimeout(() => balloon.remove(), 6000);
+      }
+
+      setInterval(() => {
+        launchBalloons();
+      }, 5000);
     }
   </script>
 </body>
